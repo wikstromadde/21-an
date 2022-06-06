@@ -1,0 +1,263 @@
+using System;
+using System.Threading;
+using System.Collections.Generic;
+
+
+namespace _21an
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Random slump = new Random();
+            int maxKortPoäng = 11;
+            int minKortPoäng = 1;
+            int maxPoäng = 21;
+
+            bool spelareVunnit = false;
+            bool harSpelat = false;
+
+            
+
+            Dictionary<int, string> senasteVinnare = new Dictionary<int, string>();
+
+            senasteVinnare[0] = "Datorn";
+            senasteVinnare[1] = "";
+            senasteVinnare[2] = "Ingen eller datorn har vunnit";
+
+
+            Console.WriteLine("Välkommen till 21:an!");
+
+            string menyVal = "0";
+            while (menyVal != "6")
+            {
+                // Skriv ut huvudmenyn
+                Console.WriteLine("Välj ett alternativ");
+                Console.WriteLine("1. Spela 21:an");
+                Console.WriteLine("2. Visa senaste vinnaren");
+                Console.WriteLine("3. Spelets regler");
+                Console.WriteLine("4. Inställningar");
+                Console.WriteLine("5. Nuvarande inställningar");
+                Console.WriteLine("6. Avsluta programmet");
+                menyVal = Console.ReadLine();
+
+                // Tom rad innan användarens val körs
+                Console.WriteLine();
+
+                switch (menyVal)
+                {
+                    // Spela en omgång av 21:an
+                    case "1":
+                        Spela21an();
+                        break;
+
+                    // Visa senaste vinnaren
+                    case "2":
+
+
+                        if (spelareVunnit == false && harSpelat == false)
+                        {
+                            Console.WriteLine($"Senaste vinnaren: {senasteVinnare[2]}");
+                        }
+                        else if (spelareVunnit == false && harSpelat == true)
+                        {
+                            Console.WriteLine($"Senaste vinnaren: {senasteVinnare[0]}");
+                        }
+                        else if (spelareVunnit == true && harSpelat == true)
+                        {
+                            Console.WriteLine($"Senaste vinnaren: {senasteVinnare[1]}");
+                        }
+
+                        
+
+
+
+                        break;
+
+                    // Visa spelets regler
+                    case "3":
+                        Console.WriteLine("Ditt mål är att tvinga datorn att få mer än 21 poäng.");
+                        Console.WriteLine("Du får poäng genom att dra kort, varje kort har 1-10 poäng.");
+                        Console.WriteLine("Om du får mer än 21 poäng har du förlorat.");
+                        Console.WriteLine("Både du och datorn får två kort i början. Därefter får du");
+                        Console.WriteLine("dra fler kort tills du är nöjd eller får över 21.");
+                        Console.WriteLine("När du är färdig drar datorn kort tills den har");
+                        Console.WriteLine("mer poäng än dig eller över 21 poäng.");
+                        break;
+
+                    // Går till inställningsmenyn
+                    case "4":
+                        string inställningsVal = "0";
+                        while (inställningsVal != "6")
+                        {
+
+                            Console.WriteLine("1. Svårighetsgrad");
+                            Console.WriteLine("2. Bakgrundsfärg");
+                            Console.WriteLine("3. Ändra senaste vinnaren");
+                            Console.WriteLine("4. Max kort värde");
+                            Console.WriteLine("5. Mer än 21 poäng");
+                            Console.WriteLine("6. Tillbaka till huvudmenyn");
+                            inställningsVal = Console.ReadLine();
+                            
+                            
+                            switch (inställningsVal)
+                            {
+                                case "1":
+                                    Console.WriteLine("Work in progress...");
+                                    break;
+
+                                case "2":
+                                    Console.WriteLine("Work in progress...");
+                                    break;
+
+                                case "3":
+                                    senasteVinnare[1] = Console.ReadLine();
+                                    break;
+
+                                case "4":
+                                    bool valid;
+
+
+                                    Console.WriteLine("Hur högt värde vill du att ett kort ska kunna ha?");
+                                    valid = int.TryParse(Console.ReadLine(), out maxKortPoäng);
+
+                                    if (!valid)
+                                    {
+                                        Console.WriteLine("Fel inmatning, du måste mata in en siffra");
+                                        continue;
+                                    }
+
+
+                                    break;
+
+                                case "5":
+
+                                    bool valid1;
+
+                                    Console.WriteLine("Vad vill du max poängen ska vara?");
+                                    valid1 = int.TryParse(Console.ReadLine(), out maxPoäng);
+
+                                    if (!valid1)
+                                    {
+                                        Console.WriteLine("Fel inmatning, du måste mata in en siffra");
+                                        continue;
+                                    }
+
+                                        break;
+
+                                case "6":
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+
+                        // Visar nuvarande inställningar
+                    case "5":
+                        Console.WriteLine("Max Poäng = " + maxPoäng);
+                        Console.WriteLine("Max Kortvärde = " + maxKortPoäng);
+                        
+                        break;
+
+                        // Avslutar programmet
+                    case "6":
+                        break;
+
+                    default:
+                        Console.WriteLine("Du valde inte ett giltigt alternativ");
+                        break;
+                }
+
+                // Tom rad innan nästa körning
+                Console.WriteLine();
+
+
+
+            }
+
+            // Metoden som spelar 21an
+            void Spela21an()
+            {
+
+
+                Console.WriteLine("Vad ska din motståndare heta?");
+                senasteVinnare[0] = Console.ReadLine();
+
+
+                int datornsPoäng = 0;
+                int spelarensPoäng = 0;
+                Console.WriteLine("Nu kommer två kort dras per spelare");
+                datornsPoäng += slump.Next(minKortPoäng, maxKortPoäng);
+                datornsPoäng += slump.Next(minKortPoäng, maxKortPoäng);
+                spelarensPoäng += slump.Next(minKortPoäng, maxKortPoäng);
+                spelarensPoäng += slump.Next(minKortPoäng, maxKortPoäng);
+
+                // Låt användaren dra fler kort
+                string kortVal = "";
+                while (kortVal != "n" && spelarensPoäng <= maxPoäng)
+                {
+                    Console.WriteLine($"Din poäng: {spelarensPoäng}");
+                    Console.WriteLine($"{senasteVinnare[0]}s poäng: {datornsPoäng}");
+                    Console.WriteLine("Vill du ha ett till kort? (j/n)");
+                    kortVal = Console.ReadLine();
+
+                    switch (kortVal)
+                    {
+                        case "j":
+                            int nyPoäng = slump.Next(minKortPoäng, maxKortPoäng);
+                            spelarensPoäng += nyPoäng;
+                            Console.WriteLine($"Ditt nya kort är värt {nyPoäng} poäng");
+                            Console.WriteLine($"Din totalpoäng är {spelarensPoäng}");
+                            break;
+
+                        case "n":
+                            break;
+
+                        default:
+                            Console.WriteLine("Du valde inte ett giltigt alternativ");
+                            break;
+                    }
+
+                }
+                // Gå tillbaka till huvudmenyn om användaren har över 21
+                if (spelarensPoäng > maxPoäng)
+                {
+                    Console.WriteLine("Du har mer än " + maxPoäng + " och har förlorat");
+                    return;
+                }
+
+                // Datorn drar kort tills den vinner eller går över 21
+                while (datornsPoäng < spelarensPoäng && datornsPoäng <= maxPoäng)
+                {
+                    int datornsNyaPoäng = slump.Next(minKortPoäng, maxKortPoäng);
+                    datornsPoäng += datornsNyaPoäng;
+                    Console.WriteLine($"Datorn drog ett kort värt {datornsNyaPoäng}");
+                }
+
+
+                Console.WriteLine($"Din poäng: {spelarensPoäng}");
+                Console.WriteLine($"{senasteVinnare[0]}s poäng: {datornsPoäng}");
+
+                // Undersök vem som vann
+                if (datornsPoäng > maxPoäng)
+                {
+                    spelareVunnit = true;
+                    harSpelat = true;
+                    Console.WriteLine("Du har vunnit!");
+                    Console.WriteLine("Skriv in ditt namn");
+                    senasteVinnare[1] = Console.ReadLine();
+                }
+                else
+                {
+                    spelareVunnit = false;
+                    harSpelat = true;
+                    Console.WriteLine($"{senasteVinnare[0]} har vunnit!");
+                    
+                }
+            }
+        }
+    }
+}
